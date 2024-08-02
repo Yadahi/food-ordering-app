@@ -1,5 +1,5 @@
-import { useCreateMyUser } from "@/api/MyUserApi";
-import { AppState, Auth0Provider, User } from "@auth0/auth0-react";
+import { Auth0Provider } from "@auth0/auth0-react";
+import { useNavigate } from "react-router-dom";
 
 type Props = {
   children: React.ReactNode;
@@ -12,8 +12,7 @@ type Props = {
  * @returns The Auth0Provider component wrapped with our custom redirect handling.
  */
 const Auth0ProviderWithNavigate = ({ children }: Props) => {
-  const { createUser } = useCreateMyUser();
-
+  const navigate = useNavigate();
   // Get the necessary configuration values from the environment variables.
   const domain = import.meta.env.VITE_AUTH0_DOMAIN;
   const clientId = import.meta.env.VITE_AUTH0_CLIENT_ID;
@@ -26,17 +25,9 @@ const Auth0ProviderWithNavigate = ({ children }: Props) => {
 
   /**
    * Callback function that handles the redirect after the user logs in or logs out.
-   * @param appState The application state passed in the URL fragment.
-   * @param user The user object returned from Auth0.
    */
-  const onRedirectCallback = (appState?: AppState, user?: User) => {
-    console.log("onRedirectCallback", appState, user);
-    if (user?.sub && user?.email) {
-      createUser({
-        auth0Id: user.sub,
-        email: user.email,
-      });
-    }
+  const onRedirectCallback = () => {
+    navigate("/auth-callback");
   };
 
   // Wrap the Auth0Provider component with our custom redirect handling.
