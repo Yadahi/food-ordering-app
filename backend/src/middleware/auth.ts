@@ -30,14 +30,10 @@ export const jwtParse = async (
   }
 
   const token = authorization.split("Bearer ")[1].trim();
-  // console.log("token", token);
 
   try {
     const decoded = jwt.decode(token) as jwt.JwtPayload;
-    // console.log("decoded", decoded);
-
     const auth0Id = decoded.sub;
-    // console.log("auth0Id", auth0Id);
 
     const user = await User.findOne({ auth0Id });
     if (!user) {
