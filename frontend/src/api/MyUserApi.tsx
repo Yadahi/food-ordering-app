@@ -9,9 +9,25 @@ type CreateUserRequest = {
   email: string;
 };
 
+/**
+ * Custom hook to create a new user.
+ * Uses the `useMutation` hook from `react-query` to handle the mutation.
+ *
+ * @returns An object containing the `createUser` function to trigger the mutation,
+ *          the `isLoading` boolean indicating if the mutation is in progress,
+ *          and the `isSuccess` boolean indicating if the mutation was successful.
+ */
 export const useCreateMyUser = () => {
   const { getAccessTokenSilently } = useAuth0();
 
+  /**
+   * Asynchronous function to create a new user.
+   * Sends a POST request to the `/api/my/user` endpoint with the user data.
+   *
+   * @param {CreateUserRequest} user - The user data to create a new user.
+   * @returns A Promise that resolves to the response from the server.
+   * @throws An error if the request fails.
+   */
   const createMyUserRequest = async (user: CreateUserRequest) => {
     const accessToken = await getAccessTokenSilently();
     const response = await fetch(`${API_BASE_URL}/api/my/user`, {
@@ -28,6 +44,13 @@ export const useCreateMyUser = () => {
     }
   };
 
+  /**
+   * The `useMutation` hook from `react-query` is used to handle the mutation.
+   * It takes the `createMyUserRequest` function as its first argument, and returns
+   * an object containing the `mutateAsync` function to trigger the mutation,
+   * the `isLoading` boolean indicating if the mutation is in progress,
+   * and the `isSuccess` boolean indicating if the mutation was successful.
+   */
   const {
     mutateAsync: createUser,
     isLoading,
