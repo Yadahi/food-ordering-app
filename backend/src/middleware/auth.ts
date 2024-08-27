@@ -12,6 +12,11 @@ declare global {
   }
 }
 
+/**
+ * If the JWT is valid and all checks (audience, issuer, algorithm) pass, the request
+ * proceeds to the next middleware or route handler. If the token is invalid, the
+ * middleware automatically sends a 401 Unauthorized response.
+ */
 export const jwtCheck = auth({
   audience: process.env.AUTH0_AUDIENCE,
   issuerBaseURL: process.env.AUTH0_ISSUER_BASE_URL,
